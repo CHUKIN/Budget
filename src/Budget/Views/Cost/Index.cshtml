@@ -1,0 +1,12 @@
+﻿@using Budget.ViewModels
+@model IEnumerable<CostModel>
+
+
+<div>
+    <h1>Траты:</h1><table class="table">
+        @foreach (CostModel p in Model)
+        {
+            <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Category</td><td>@p.Date</td><td>@p.User</td></tr>
+        }
+    </table>
+</div><hr />

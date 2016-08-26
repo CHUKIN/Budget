@@ -1,12 +1,9 @@
 ﻿@using Budget.Models
 @model UserContext
+
 <div>
     <h1>Кошельки:</h1><table class="table">
-    @*@foreach (Cash p in Model)
-    {
-        <tr><td>@p.Name</td><td>@p.Money</td></tr>
-    }*@
-                          @foreach (Cash p in Model.Cashs)
+                   @foreach (Cash p in Model.Cashs)
         {
             <tr><td>@p.Name</td><td>@p.Money</td></tr>
         }
@@ -23,3 +20,26 @@
         }
     </table>
 </div><hr />
+<div>
+    <h1>Создание траты:</h1>
+    <form asp-action="Add" asp-controller="Cost" asp-anti-forgery="true">
+
+        <p>
+            <label for="category">Выберите категорию:</label>
+            <select name="category">
+                @foreach (Category i in Model.Categorys)
+                {
+                    <option value="@i.Name">@i.Name</option>
+                }
+
+            </select>
+            <label>Описание:</label><br />
+            <textarea name="name"></textarea>
+            <label>Сумма:</label><br />
+            <input type="number" name="money" /><br /><br />
+        </p>
+        <p>
+            <input type="submit" value="Добавить" />
+        </p>
+    </form>
+</div>
