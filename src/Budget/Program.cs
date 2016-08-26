@@ -13,6 +13,7 @@ namespace Budget
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
+                .UseUrls("http://192.168.0.100:9999")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

@@ -1,0 +1,66 @@
+﻿@using Budget.Models
+@model IEnumerable<Cash>
+<div>
+    <h1>Кошельки:</h1><table class="table">
+        @foreach (Cash p in Model)
+        {
+            <tr><td>@p.Name</td><td>@p.Money</td></tr>
+        }
+    </table>
+</div><hr />
+<div>
+    <h1>Изменения кошелька:</h1>
+    @*<form method="post">*@
+    <form asp-action="Update" asp-controller="Cash" asp-anti-forgery="true">
+
+        <p>
+            <label for="Name">Выберите кошелёк:</label>
+            <select name="Name">
+                @foreach (Cash i in Model)
+                {
+                    <option value="@i.Name">@i.Name</option>
+                }
+
+            </select>
+        </p>
+        <p>
+            <label for="Money">Новая сумма:</label>
+            <input type="number" name="Money" />
+        </p>
+        <p>
+            <input type="submit" value="Изменить" />
+        </p>
+    </form>
+</div><hr />
+<div>
+    <h1>Удаление кошелька:</h1>
+    <form asp-action="Delete" asp-controller="Cash" asp-anti-forgery="true">
+
+        <p>
+            <label for="NameDel">Выберите кошелёк:</label>
+            <select name="NameDel">
+                @foreach (Cash i in Model)
+                {
+                    <option value="@i.Name">@i.Name</option>
+                }
+
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="Удалить" />
+        </p>
+    </form>
+</div><hr />
+<div>
+    <h1>Добавление кошелька:</h1>
+    <form asp-action="Add" asp-controller="Cash" asp-anti-forgery="true">
+
+        <p>
+            <label>Название:</label><br />
+            <input type="text" name="name" /><br /><br />
+            <label>Сумма:</label><br />
+            <input type="number" name="money" /><br /><br />
+            <input type="submit" value="Создать" />
+            </p>
+    </form>
+</div>

@@ -1,0 +1,73 @@
+﻿@using Budget.Models
+@model IEnumerable<Saving>
+<div>
+    <h1>Сбережения:</h1><table class="table">
+        @foreach (Saving p in Model)
+        {
+            <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Current</td><td>@p.Date.ToString("D")</td></tr>
+        }
+    </table>
+</div><hr />
+
+<div>
+    <h1>Добавление сбережения:</h1>
+    <form asp-action="Add" asp-controller="Saving" asp-anti-forgery="true">
+
+        <p>
+            <label>Название:</label><br />
+            <input type="text" name="name" /><br /><br />
+            <label>Сумма:</label><br />
+            <input type="number" name="money" /><br /><br />
+            <label> Выберите дату:</label><br />
+            <input type="date" name="date"> <br /><br />
+            <input type="submit" value="Создать" />
+        </p>
+    </form>
+</div><hr />
+<div>
+    <h1>Удаление сбережения:</h1>
+    <form asp-action="Delete" asp-controller="Saving" asp-anti-forgery="true">
+
+        <p>
+            <label for="NameDel">Выберите сбережение:</label>
+            <select name="NameDel">
+                @foreach (Saving i in Model)
+                {
+                    <option value="@i.Name">@i.Name</option>
+                }
+
+            </select>
+        </p>
+        <p>
+            <input type="submit" value="Удалить" />
+        </p>
+    </form>
+</div><hr />
+<div>
+    <h1>Изменения сбережения:</h1>
+    @*<form method="post">*@
+    <form asp-action="Update" asp-controller="Saving" asp-anti-forgery="true">
+
+        <p>
+            <label for="Name">Выберите сбережение:</label>
+            <select name="name">
+                @foreach (Saving i in Model)
+                {
+                    <option value="@i.Name">@i.Name</option>
+                }
+
+            </select>
+        </p>
+        <p>
+            <label for="Money">Новая сумма:</label>
+            <input type="number" name="money" />
+            <label for="Money">Новая текущая сумма:</label>
+            <input type="number" name="current" />
+            <label> Новая дата:</label>
+            <input type="date" name="date"> <br /><br />
+        </p>
+        <p>
+            <input type="submit" value="Изменить" />
+        </p>
+    </form>
+</div><hr />

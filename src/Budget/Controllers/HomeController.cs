@@ -3,14 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Budget.Models;
 
 namespace Budget.Controllers
 {
     public class HomeController : Controller
     {
+        private UserContext db;
+        public HomeController(UserContext context)
+        {
+            db = context;
+        }
+        
+        [Authorize]
         public IActionResult Index()
         {
-            return View();
+            List<Cash> cash = new List<Cash> { };
+            foreach (Cash tmp in db.Cashs)
+            {
+                cash.Add(tmp);
+            }
+            
+            return View(db);
         }
 
         public IActionResult About()
@@ -31,5 +46,6 @@ namespace Budget.Controllers
         {
             return View();
         }
+       
     }
 }
