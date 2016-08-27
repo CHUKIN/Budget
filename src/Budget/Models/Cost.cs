@@ -17,5 +17,9 @@ namespace Budget.Models
         public Category Category { get; set; }
         public int UserId { get; set; }
         public User User { get; set; }
+        public int Count { get; set; }
+        public string Unit { get; set; }
+        public string Cash { get; set; }
+
     }
 }

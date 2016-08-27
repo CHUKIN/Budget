@@ -1,51 +1,78 @@
 ﻿@using Budget.Models
 @model IEnumerable<Saving>
-<div>
-    <h1>Сбережения:</h1><table class="table">
-        @foreach (Saving p in Model)
-        {
-            <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Current</td><td>@p.Date.ToString("D")</td></tr>
-        }
+
+
+<div class="container">
+    <h3>Сбережения:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Название</th>
+          
+            
+                <th>Стоимость</th>
+           
+           
+                <th>Текущее кол-во</th>
+         
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Saving p in Model)
+            {
+                <tr>
+                    <td>@p.Name</td>
+                    <td>@p.Money</td>
+                    <td>@p.Current</td>
+                    <td>@p.Date.ToString("D")</td>
+                    <td>
+                        <div>
+                            <form asp-action="Delete" asp-controller="Saving" asp-anti-forgery="true">
+                                <button value="@p.Name" name='NameDel' type="submit">Удалить</button>
+                            </form>
+                             </div>  
+
+</td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div><hr />
 
-<div>
-    <h1>Добавление сбережения:</h1>
-    <form asp-action="Add" asp-controller="Saving" asp-anti-forgery="true">
+@*<form asp-action="Update" asp-controller="Saving" asp-anti-forgery="true">
 
-        <p>
-            <label>Название:</label><br />
-            <input type="text" name="name" /><br /><br />
-            <label>Сумма:</label><br />
-            <input type="number" name="money" /><br /><br />
-            <label> Выберите дату:</label><br />
-            <input type="date" name="date"> <br /><br />
-            <input type="submit" value="Создать" />
-        </p>
+    <p>
+        <input type="text" name="name" class="form-control" id="name" placeholder="Название:">
+        <input type="number" name="money" class="form-control" id="name" placeholder="Сумма:">
+        <input type="date" name="date" class="form-control" id="name" placeholder="Дата:">
+        <button type="submit">Изменить</button>
+    </p>
+</form>*@
+
+<div class="container">
+    <h3>Добавить новое сбережение:</h3>
+    <form class="form-inline" form action="~/Saving/Add" method=POST>
+        <div class="form-group">
+            <label class="sr-only" for="name">Name:</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="Название:">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="name">Name:</label>
+            <input type="number" name="money" class="form-control" id="name" placeholder="Сумма:">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="name">Name:</label>
+            <input type="date" name="date" class="form-control" id="name" placeholder="Дата:">
+        </div>
+        <button type="submit" class="btn btn-default">Добавить</button>
     </form>
-</div><hr />
-<div>
-    <h1>Удаление сбережения:</h1>
-    <form asp-action="Delete" asp-controller="Saving" asp-anti-forgery="true">
+</div>
 
-        <p>
-            <label for="NameDel">Выберите сбережение:</label>
-            <select name="NameDel">
-                @foreach (Saving i in Model)
-                {
-                    <option value="@i.Name">@i.Name</option>
-                }
 
-            </select>
-        </p>
-        <p>
-            <input type="submit" value="Удалить" />
-        </p>
-    </form>
-</div><hr />
-<div>
-    <h1>Изменения сбережения:</h1>
-    @*<form method="post">*@
+
+
+    @*<h1>Изменения сбережения:</h1>
     <form asp-action="Update" asp-controller="Saving" asp-anti-forgery="true">
 
         <p>
@@ -70,4 +97,4 @@
             <input type="submit" value="Изменить" />
         </p>
     </form>
-</div><hr />
+</div><hr />*@

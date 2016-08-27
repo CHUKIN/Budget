@@ -25,6 +25,7 @@ namespace Budget.Controllers
          
             return View(db.Categorys);
         }
+        
         public IActionResult Add(string name)
         {
             if (db.Categorys.Where(i => i.Name == name).FirstOrDefault() == null)

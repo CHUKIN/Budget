@@ -47,13 +47,19 @@ namespace Budget.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("Cash");
+
                     b.Property<int>("CategoryId");
+
+                    b.Property<int>("Count");
 
                     b.Property<DateTime>("Date");
 
                     b.Property<int>("Money");
 
                     b.Property<string>("Name");
+
+                    b.Property<string>("Unit");
 
                     b.Property<int>("UserId");
 
@@ -82,6 +88,18 @@ namespace Budget.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Savings");
+                });
+
+            modelBuilder.Entity("Budget.Models.Unit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Units");
                 });
 
             modelBuilder.Entity("Budget.Models.User", b =>

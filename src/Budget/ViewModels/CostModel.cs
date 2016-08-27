@@ -13,5 +13,8 @@ namespace Budget.ViewModels
         public int Money { get; set; }
         public string Category { get; set; }
         public string User { get; set; }
+        public int Count { get; set; }
+        public string Unit { get; set; }
+        public string Cash { get; set; }
     }
 }

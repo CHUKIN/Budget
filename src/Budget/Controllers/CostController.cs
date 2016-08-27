@@ -25,16 +25,23 @@ namespace Budget.Controllers
             List<CostModel> result = new List<CostModel> { };
             foreach (Cost i in db.Costs)
             {
-                CostModel costmodel = new CostModel { Name = i.Name, Money = i.Money, Category = db.Categorys.Where(j => j.Id==i.CategoryId).FirstOrDefault().Name, Date = i.Date, User = db.Users.Where(j => j.Id == i.UserId).FirstOrDefault().Login };
+                CostModel costmodel = new CostModel { Name = i.Name, Money = i.Money, Category = db.Categorys.Where(j => j.Id==i.CategoryId).FirstOrDefault().Name, Date = i.Date, User = db.Users.Where(j => j.Id == i.UserId).FirstOrDefault().Login, Count=i.Count, Unit=i.Unit,Cash=i.Cash};
                 result.Add(costmodel);
             }
 
             return View(result);
 
         }
-        public IActionResult Add(string name, int money, string category)
+        public IActionResult Add(string name, int money, string category,int count, string unit,string cash="Наличные")
         {
-            db.Costs.Add(new Cost { Name = name, Money = money, Category = db.Categorys.Where(i => i.Name == category).FirstOrDefault(), Date = DateTime.Now ,User=db.Users.Where(i=> i.Login==User.Identity.Name).FirstOrDefault()});
+            Cash tmp = db.Cashs.Where(i => i.Name == cash).FirstOrDefault();
+            if (tmp.Money >= money)
+            {
+
+
+                db.Costs.Add(new Cost { Name = name, Money = money, Category = db.Categorys.Where(i => i.Name == category).FirstOrDefault(), Date = DateTime.Today, User = db.Users.Where(i => i.Login == User.Identity.Name).FirstOrDefault(), Count = count, Unit = unit,Cash=cash });
+                tmp.Money -= money;
+            }
             db.SaveChanges();
             return Redirect("~/Home/Index");
         }

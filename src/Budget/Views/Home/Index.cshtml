@@ -1,45 +1,163 @@
 ﻿@using Budget.Models
 @model UserContext
 
-<div>
-    <h1>Кошельки:</h1><table class="table">
-                   @foreach (Cash p in Model.Cashs)
-        {
-            <tr><td>@p.Name</td><td>@p.Money</td></tr>
-        }
-</table></div><hr />
-<div>
-    <h1>Сбережения:</h1><table class="table">
-        @*@foreach (Cash p in Model)
-            {
-                <tr><td>@p.Name</td><td>@p.Money</td></tr>
-            }*@
-        @foreach (Saving p in Model.Savings)
-        {
-            <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Current</td><td>@p.Date.ToString("D")</td></tr>
-        }
-    </table>
-</div><hr />
-<div>
-    <h1>Создание траты:</h1>
-    <form asp-action="Add" asp-controller="Cost" asp-anti-forgery="true">
 
-        <p>
-            <label for="category">Выберите категорию:</label>
-            <select name="category">
-                @foreach (Category i in Model.Categorys)
-                {
-                    <option value="@i.Name">@i.Name</option>
+    <div class="container">
+        <h3>Кошельки:</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название</th>
+
+
+                    <th>Деньги</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int AllMoney = 0;
+                    double AllSaving = 0;
+                    int AllCostCash = 0;
+                    int AllCost = 0;
+                    int cash = 0;
+                    Cash tmp = Model.Cashs.Where(i => i.Name == "Наличные").FirstOrDefault();
+                    if (tmp != null)
+                    {
+                        cash = tmp.Money;
+
+                    }
                 }
+                @foreach (Cash p in Model.Cashs)
+                {
+                    AllMoney += p.Money;
+                    <tr>
+                        <td>@p.Name</td>
+                        <td>@p.Money</td>
 
-            </select>
-            <label>Описание:</label><br />
-            <textarea name="name"></textarea>
-            <label>Сумма:</label><br />
-            <input type="number" name="money" /><br /><br />
-        </p>
-        <p>
-            <input type="submit" value="Добавить" />
-        </p>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div><hr />
+    <div class="container">
+        <h3>Сбережения:</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Название</th>
+
+
+                    <th>Стоимость</th>
+
+
+                    <th>Текущее кол-во</th>
+
+                    <th>Дата</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (Saving p in Model.Savings)
+            {
+                AllSaving += ((p.Money - p.Current) / (p.Date.Subtract(DateTime.Now)).TotalDays);
+                    <tr>
+                        <td>@p.Name</td>
+                        <td>@p.Money</td>
+                        <td>@p.Current</td>
+                        <td>@p.Date.ToString("D")</td>
+                        <td></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div><hr />
+    @*<div>
+        <h1>Финансы:</h1><table class="table">
+            @{
+                foreach (Cost p in Model.Costs.Where(i => i.Date == DateTime.Today))
+                {
+                    AllCost += p.Money;
+                    if (p.Cash == "Наличные")
+                    {
+                        AllCostCash += p.Money;
+
+                    }
+                }
+            }
+
+
+            <tr><td>@(cash / 30 - AllCostCash)</td><td>@(AllMoney / 30 - AllCost)</td></tr>
+            <tr><td>@(cash / 30)</td><td>@(AllMoney / 30)</td></tr>
+            <tr><td>@( Math.Round((cash / 30 - AllSaving), 2))</td><td>@(Math.Round((AllMoney / 30 - AllSaving), 2))</td></tr>
+
+        </table>
+    </div><hr />*@
+
+
+
+
+
+<div class="container">
+    <h3>Добавление расходов:</h3>
+    <form class="form-inline" form action="~/Cost/Add" method=POST>
+        <div class="form-group">
+            <div class="form-group">
+                <select class="form-control" id="sel1" name="category">
+@foreach (Category i in Model.Categorys)
+{
+    <option value="@i.Name">@i.Name</option>
+}
+                </select>
+                <br>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="name">Name:</label>
+            <input type="text" name="name" class="form-control" id="name" placeholder="Введите название">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="money">Money:</label>
+            <input type="number" name="money" class="form-control" id="name" placeholder="Сумма">
+        </div>
+        <div class="form-group">
+            <label class="sr-only" for="money">Money:</label>
+            <input type="number" name="count" class="form-control" id="name" placeholder="Количество">
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <select class="form-control" id="sel1" name="unit">
+                    @foreach (Unit i in Model.Units)
+                    {
+                        <option value="@i.Name">@i.Name</option>
+                    }
+                </select>
+                <br>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <select class="form-control" id="sel1" name="cash">
+                    @foreach (Cash i in Model.Cashs.Where(i => i.Name == "Наличные"))
+                    {
+                        <option value="@i.Name">@i.Name</option>
+                    }
+                    @foreach (Cash i in Model.Cashs.Where(i => i.Name != "Наличные"))
+                    {
+                        <option value="@i.Name">@i.Name</option>
+                    }
+                </select>
+                <br>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-default">Добавить</button>
     </form>
 </div>
+
+
+
+
+
+
+

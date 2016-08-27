@@ -2,11 +2,27 @@
 @model IEnumerable<CostModel>
 
 
-<div>
-    <h1>Траты:</h1><table class="table">
-        @foreach (CostModel p in Model)
-        {
-            <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Category</td><td>@p.Date</td><td>@p.User</td></tr>
-        }
+
+<div class="container">
+    <h3>Расходы:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Описание</th>
+                <th>Стоимость</th>
+                <th>Категория</th>
+                <th>Дата</th>
+                <th>Количество</th>
+                <th>Единица измерения</th>
+                <th>Пользователь</th>
+                <th>Кошелёк</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (CostModel p in Model.OrderByDescending(i=>i.Date))
+            {
+                <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Category</td><td>@p.Date.ToString("D")</td><td>@p.Count</td><td>@p.Unit</td><td>@p.User</td><td>@p.Cash</td></tr>
+            }
+        </tbody>
     </table>
-</div><hr />
+</div>
