@@ -1,0 +1,29 @@
+﻿@using Budget.Models
+@using Budget.ViewModels
+@model UserContext
+
+
+
+
+
+<div class="container">
+    <h3>Вклады в сбережения:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Сбережение</th>
+                <th>Стоимость</th>
+                <th>Кошелёк</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Deposit p in Model.Deposits.OrderByDescending(i => i.Date))
+            {
+              
+                <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Cash</td><td>@p.Date.ToString("D")</td></tr>
+            }
+
+        </tbody>
+    </table>
+</div>

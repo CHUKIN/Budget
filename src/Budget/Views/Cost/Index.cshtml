@@ -1,5 +1,6 @@
-﻿@using Budget.ViewModels
-@model IEnumerable<CostModel>
+﻿@using Budget.Models
+@using Budget.ViewModels
+@model UserContext
 
 
 
@@ -19,10 +20,12 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (CostModel p in Model.OrderByDescending(i=>i.Date))
+            @foreach (Cost i in Model.Costs.OrderByDescending(i=>i.Id))
             {
+                CostModel p = new CostModel { Name = i.Name, Money = i.Money, Category = Model.Categorys.Where(j => j.Id == i.CategoryId).FirstOrDefault().Name, Date = i.Date, User = Model.Users.Where(j => j.Id == i.UserId).FirstOrDefault().Login, Count = i.Count, Unit = i.Unit, Cash = i.Cash };
                 <tr><td>@p.Name</td><td>@p.Money</td><td>@p.Category</td><td>@p.Date.ToString("D")</td><td>@p.Count</td><td>@p.Unit</td><td>@p.User</td><td>@p.Cash</td></tr>
             }
+            
         </tbody>
     </table>
 </div>

@@ -5,13 +5,12 @@ using System.Threading.Tasks;
 
 namespace Budget.Models
 {
-    public class Saving
+    public class Deposit
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public int Money { get; set; }
-        public int Current { get; set; }
+        public string Cash { get; set; }
         public DateTime Date { get; set; }
-        public DateTime DateCreate { get; set; }
     }
 }

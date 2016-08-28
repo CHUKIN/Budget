@@ -34,8 +34,14 @@
                     <li><a asp-area="" asp-controller="Cash" asp-action="Index">Кошельки</a></li>
                     <li><a asp-area="" asp-controller="Saving" asp-action="Index">Сбережения</a></li>
                     <li><a asp-area="" asp-controller="Category" asp-action="Index">Категории</a></li>
-                    <li><a asp-area="" asp-controller="Cost" asp-action="Index">Траты</a></li>
-                    <li><a asp-area="" asp-controller="Account" asp-action="Logout">Выход</a></li>
+                    <li><a asp-area="" asp-controller="Cost" asp-action="Index">Расходы</a></li>
+                    <li><a asp-area="" asp-controller="Deposit" asp-action="Index">Вклады</a></li>
+                   
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a class="glyphicon " asp-area="" asp-controller="Account" asp-action="Register"> Регистрация</a></li>
+                    <li><a class="glyphicon glyphicon-log-in" asp-area="" asp-controller="Account" asp-action="Logout"> Выход</a></li>
+
                 </ul>
             </div>
         </div>

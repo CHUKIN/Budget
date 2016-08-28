@@ -31,14 +31,14 @@ namespace Budget.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(string Name, int Money)
+        public IActionResult Update(string Name, int Money, string OldName)
         {
             foreach (Cash i in db.Cashs)
             {
-                if (i.Name == Name)
+                if (i.Name == OldName)
                 {
                     i.Money = Money;
-
+                    i.Name = Name;
                     break;
                 }
             }
@@ -85,6 +85,14 @@ namespace Budget.Controllers
                 cash.Add(tmp);
             }
             return View("Index", cash);
+        }
+        [HttpPost]
+        public IActionResult Many(string name, int money)
+        {
+            Cash cash = db.Cashs.Where(i => i.Name == name).FirstOrDefault();
+            cash.Money += money;
+            db.SaveChanges();
+            return Redirect("~/Home/Index");
         }
     }
 }

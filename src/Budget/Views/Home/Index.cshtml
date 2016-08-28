@@ -1,7 +1,6 @@
 ﻿@using Budget.Models
 @model UserContext
 
-
     <div class="container">
         <h3>Кошельки:</h3>
         <table class="table table-striped">
@@ -17,11 +16,17 @@
             </thead>
             <tbody>
                 @{
-                    int AllMoney = 0;
-                    double AllSaving = 0;
-                    int AllCostCash = 0;
-                    int AllCost = 0;
-                    int cash = 0;
+                    double nowsaving = 0;
+                    double allsaving = 0;
+                    double allcash = 0;
+                    double cash = 0;
+                    double nowcash = 0;
+                    double nowallcash = 0;
+                    double totalcash = 1850;
+                    DateTime datecreate = new DateTime(2016, 08, 28);
+                    totalcash += (DateTime.Now.Subtract(datecreate).TotalDays*1850*12/365);
+                    double newtotalcash = 0;
+                    double nowtotalcash = 0;
                     Cash tmp = Model.Cashs.Where(i => i.Name == "Наличные").FirstOrDefault();
                     if (tmp != null)
                     {
@@ -31,11 +36,92 @@
                 }
                 @foreach (Cash p in Model.Cashs)
                 {
-                    AllMoney += p.Money;
+                    allcash += p.Money;
                     <tr>
                         <td>@p.Name</td>
                         <td>@p.Money</td>
+                        <td>
+                            <form asp-action="Many" asp-controller="Cash" asp-anti-forgery="true">
+                                <div class="dropdown">
+                                    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                       Добавить денюжку
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                       
+                                        <div class="form-group">
+                                            <label class="sr-only" for="name">Name:</label>
+                                            <input type="number" name="money" class="form-control" id="name" placeholder="Сумма">
+                                        </div>
+                                        <button type="submit" value="@p.Name" name="name" class="btn btn-default btn-block">Добавить</button>
+                                    </ul>
+                                </div>
+                            </form>
 
+                        </td>
+                        <td>
+                            <div >
+                                <div class="panel-group ">
+                                    
+                                       
+                                            <div class="panel-title ">
+                                                <a class="btn btn-default  " data-toggle="collapse" href="#@p.Name">Добавить расходы</a>
+                                            </div>
+                                       
+                                        <div id="@p.Name" class="panel-collapse collapse ">
+                                            <form class="form-inline" form action="~/Cost/Add" method=POST>
+                                                <div class="panel-body ">
+                                                    <div class="form-group ">
+                                                        <div class="form-group">
+                                                            <select class="form-control" id="sel1" name="category">
+                                                                @foreach (Category i in Model.Categorys)
+                                                                {
+                                                                    <option value="@i.Name">@i.Name</option>
+                                                                }
+                                                            </select>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="name">Name:</label>
+                                                        <input type="text" name="name" class="form-control" id="name" placeholder="Введите название">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="money">Money:</label>
+                                                        <input type="number" name="money" class="form-control" id="name" placeholder="Сумма">
+                                                    </div>
+                                                    </div>
+                                                <div class="panel-body">
+                                                    <div class="form-group">
+                                                        <label class="sr-only" for="money">Money:</label>
+                                                        <input type="number" name="count" class="form-control" id="name" placeholder="Количество">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-group">
+                                                            <select class="form-control" id="sel1" name="unit">
+                                                                @foreach (Unit i in Model.Units)
+                                                                {
+                                                                    <option value="@i.Name">@i.Name</option>
+                                                                }
+                                                            </select>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-default" value="@p.Name" name='cash'>Добавить</button>
+                                                    </div>
+
+                                                   
+                                                  
+                                                    
+</form>
+                                        </div>
+                                   
+                                </div>
+                            </div>
+
+
+</td>
+                     
                     </tr>
                 }
             </tbody>
@@ -55,109 +141,155 @@
                     <th>Текущее кол-во</th>
 
                     <th>Дата</th>
+                    <th>Прогресс</th>
                 </tr>
             </thead>
             <tbody>
 
-                @foreach (Saving p in Model.Savings)
-            {
-                AllSaving += ((p.Money - p.Current) / (p.Date.Subtract(DateTime.Now)).TotalDays);
-                    <tr>
-                        <td>@p.Name</td>
-                        <td>@p.Money</td>
-                        <td>@p.Current</td>
-                        <td>@p.Date.ToString("D")</td>
-                        <td></td>
-                    </tr>
-                }
+               
+                    @foreach (Saving p in Model.Savings)
+                    {
+                        <tr>
+                            <td>@p.Name</td>
+                            <td>@p.Money</td>
+                            <td>@p.Current</td>
+                            <td >@p.Date.ToString("D")</td>
+                            <td>
+
+                                <div class="progress">
+                                    @{
+                                        double tmpp = ((Convert.ToDouble(p.Current)) / (Convert.ToDouble(p.Money)) * 100);
+                                        string result;
+                                        if (p.Current>=p.Money)
+                                        {
+                                            result = "progress-bar progress-bar-success progress-bar-striped active";
+                                        }
+                                        else
+                                        {
+                                            result = "progress-bar progress-bar-striped active";
+
+                                        }
+                                    }
+                                    <div class="@result" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100" style="width:@(Math.Round(tmpp,0))%">
+                                        @(tmpp)%
+                                    </div>
+                                </div>
+
+                            </td>
+                           <td>
+                               <div>
+                                   <div class="panel-group ">
+
+                                       <div class="panel-heading ">
+                                           <h4 class="panel-title ">
+                                               <a class="btn btn-default  " data-toggle="collapse" href="#@p.Name">Добавить в сбережение</a>
+                                           </h4>
+                                       </div>
+                                       <div id="@p.Name" class="panel-collapse collapse ">
+                                           <form class="form-inline" form action="~/Saving/Current" method=POST>
+                                               <div class="panel-body ">
+                                                   <div class="form-group ">
+                                                       <div class="form-group">
+                                                           <select class="form-control" id="sel11" name="cash">
+                                                               @foreach (Cash i in Model.Cashs)
+                                                               {
+                                                                   <option value="@i.Name">@i.Name</option>
+                                                               }
+                                                           </select>
+                                                           <br>
+                                                       </div>
+                                                   </div>
+                                                   
+                                                   <div class="form-group">
+                                                       <label class="sr-only" for="money">Money:</label>
+                                                       <input type="number" name="money" class="form-control" id="name" placeholder="Сумма">
+                                                   </div>
+                                               </div>
+                                               <div class="panel-body">
+                                                  
+                                                   
+                                                   <button type="submit" class="btn btn-default" value="@p.Name" name='name'>Добавить</button>
+                                               </div>
+
+
+
+
+                                           </form>
+                                       </div>
+
+                                   </div>
+                               </div>
+
+                           </td>
+
+                        </tr>
+                                            }
             </tbody>
         </table>
     </div><hr />
-    @*<div>
-        <h1>Финансы:</h1><table class="table">
-            @{
-                foreach (Cost p in Model.Costs.Where(i => i.Date == DateTime.Today))
-                {
-                    AllCost += p.Money;
-                    if (p.Cash == "Наличные")
-                    {
-                        AllCostCash += p.Money;
-
-                    }
-                }
-            }
-
-
-            <tr><td>@(cash / 30 - AllCostCash)</td><td>@(AllMoney / 30 - AllCost)</td></tr>
-            <tr><td>@(cash / 30)</td><td>@(AllMoney / 30)</td></tr>
-            <tr><td>@( Math.Round((cash / 30 - AllSaving), 2))</td><td>@(Math.Round((AllMoney / 30 - AllSaving), 2))</td></tr>
-
-        </table>
-    </div><hr />*@
-
-
-
+  
 
 
 <div class="container">
-    <h3>Добавление расходов:</h3>
-    <form class="form-inline" form action="~/Cost/Add" method=POST>
-        <div class="form-group">
-            <div class="form-group">
-                <select class="form-control" id="sel1" name="category">
-@foreach (Category i in Model.Categorys)
-{
-    <option value="@i.Name">@i.Name</option>
-}
-                </select>
-                <br>
-            </div>
-        </div>
-        <div class="form-group">
-            <label class="sr-only" for="name">Name:</label>
-            <input type="text" name="name" class="form-control" id="name" placeholder="Введите название">
-        </div>
-        <div class="form-group">
-            <label class="sr-only" for="money">Money:</label>
-            <input type="number" name="money" class="form-control" id="name" placeholder="Сумма">
-        </div>
-        <div class="form-group">
-            <label class="sr-only" for="money">Money:</label>
-            <input type="number" name="count" class="form-control" id="name" placeholder="Количество">
-        </div>
-        <div class="form-group">
-            <div class="form-group">
-                <select class="form-control" id="sel1" name="unit">
-                    @foreach (Unit i in Model.Units)
-                    {
-                        <option value="@i.Name">@i.Name</option>
-                    }
-                </select>
-                <br>
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="form-group">
-                <select class="form-control" id="sel1" name="cash">
-                    @foreach (Cash i in Model.Cashs.Where(i => i.Name == "Наличные"))
-                    {
-                        <option value="@i.Name">@i.Name</option>
-                    }
-                    @foreach (Cash i in Model.Cashs.Where(i => i.Name != "Наличные"))
-                    {
-                        <option value="@i.Name">@i.Name</option>
-                    }
-                </select>
-                <br>
-            </div>
-        </div>
-        <button type="submit" class="btn btn-default">Добавить</button>
-    </form>
+    <h3>Финансы:</h3>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th> </th>
+               <th>Наличные</th>
+                <th>Все</th>
+                <th>Абстрактные</th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                nowcash = (cash / 31);
+                foreach (Cost p in Model.Costs.Where(i=>i.Date==DateTime.Today&&i.Cash=="Наличные"))
+                {
+                    nowcash -= p.Money;
+                }
+                cash -= nowcash;
+                nowallcash = (allcash / 31);
+                foreach (Cost p in Model.Costs.Where(i => i.Date == DateTime.Today))
+                {
+                    nowallcash -= p.Money;
+                }
+                allcash -= nowallcash;
+                newtotalcash = totalcash;
+                foreach(Cost p in Model.Costs.Where(i=> i.Date.Subtract(DateTime.Today).TotalDays <= 31&&i.Date!=DateTime.Today))
+                {
+                    newtotalcash -= p.Money;
+                }
+                nowtotalcash = newtotalcash / 31;
+                foreach (Cost p in Model.Costs.Where(i => i.Date == DateTime.Today))
+                {
+                    nowtotalcash -= p.Money;
+                }
+                newtotalcash -= nowtotalcash;
+                string result1 = "";
+                string result2 = "";
+                string result3 = "";
+                string resultt1 = "";
+                string resultt2 = "";
+                string resultt3 = "";
+               
+
+
+            }
+            <tr>
+                <th>Сегодня</th><td class="@result1">@(Math.Round(nowcash,2))</td><td class="@result2">@(Math.Round(nowallcash, 2))</td><td class="@result3">@(Math.Round(nowtotalcash, 2))</td>
+                
+            </tr>
+            <tr>
+                <th>В день</th>
+                
+                <td class="@resultt1">@(Math.Round((cash / 30), 2))</td>
+                <td class="resultt2">@(Math.Round((allcash / 30), 2))</td>
+                <td class="resultt3">@(Math.Round((newtotalcash / 30), 2))</td>
+            </tr>
+           
+        </tbody>
+    </table>
 </div>
-
-
-
-
-
-
 

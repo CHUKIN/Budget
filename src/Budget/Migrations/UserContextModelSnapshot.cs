@@ -72,6 +72,24 @@ namespace Budget.Migrations
                     b.ToTable("Costs");
                 });
 
+            modelBuilder.Entity("Budget.Models.Deposit", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Cash");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("Money");
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Deposits");
+                });
+
             modelBuilder.Entity("Budget.Models.Saving", b =>
                 {
                     b.Property<int>("Id")
@@ -80,6 +98,8 @@ namespace Budget.Migrations
                     b.Property<int>("Current");
 
                     b.Property<DateTime>("Date");
+
+                    b.Property<DateTime>("DateCreate");
 
                     b.Property<int>("Money");
 

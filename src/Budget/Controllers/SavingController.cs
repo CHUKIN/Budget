@@ -28,7 +28,7 @@ namespace Budget.Controllers
             if (db.Savings.Where(i => i.Name == name).FirstOrDefault() == null)
             {
                 
-                db.Savings.Add(new Saving { Name = name, Money = money, Date = date, Current = 0 });
+                db.Savings.Add(new Saving { Name = name, Money = money, Date = date, Current = 0,DateCreate=DateTime.Today });
                 db.SaveChanges();
             }
 
@@ -52,22 +52,35 @@ namespace Budget.Controllers
             return View("Index", db.Savings);
         }
         [HttpPost]
-        public IActionResult Update(string name, int money, int current, DateTime date)
+        public IActionResult Update(string name, int money, int current, DateTime date,string oldname)
         {
             foreach (Saving i in db.Savings)
             {
-                if (i.Name == name)
+                if (i.Name == oldname)
                 {
                     i.Money = money;
                     i.Current = current;
                     i.Date = date;
-
+                    i.Name = name;
                     break;
                 }
             }
             db.SaveChanges();
            
             return View("Index", db.Savings);
+        }
+        public IActionResult Current(string cash, string name, int money)
+        {
+            Cash tmp = db.Cashs.Where(i => i.Name == cash).FirstOrDefault();
+            Saving saving = db.Savings.Where(i => i.Name == name).FirstOrDefault();
+            if (tmp.Money>=money)
+            {
+                db.Deposits.Add(new Deposit { Name = name, Money = money ,Date=DateTime.Now, Cash=cash});
+                tmp.Money -= money;
+                saving.Current += money;
+                db.SaveChanges();
+            }
+            return Redirect("~/Home/Index");
         }
     }
 }
