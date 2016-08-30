@@ -23,7 +23,7 @@
                     double nowcash = 0;
                     double nowallcash = 0;
                     double totalcash = 1850;
-                    DateTime datecreate = new DateTime(2016, 08, 28);
+                    DateTime datecreate = new DateTime(2016, 09, 01);
                     totalcash += (DateTime.Now.Subtract(datecreate).TotalDays*1850*12/365);
                     double newtotalcash = 0;
                     double nowtotalcash = 0;
@@ -180,11 +180,11 @@
                                <div>
                                    <div class="panel-group ">
 
-                                       <div class="panel-heading ">
+                                       
                                            <h4 class="panel-title ">
                                                <a class="btn btn-default  " data-toggle="collapse" href="#@p.Name">Добавить в сбережение</a>
                                            </h4>
-                                       </div>
+                                      
                                        <div id="@p.Name" class="panel-collapse collapse ">
                                            <form class="form-inline" form action="~/Saving/Current" method=POST>
                                                <div class="panel-body ">
@@ -226,7 +226,7 @@
                                             }
             </tbody>
         </table>
-    </div><hr />
+    </div>
   
 
 
@@ -248,16 +248,30 @@
                 foreach (Cost p in Model.Costs.Where(i=>i.Date==DateTime.Today&&i.Cash=="Наличные"))
                 {
                     nowcash -= p.Money;
+                    cash -= p.Money;
                 }
-                cash -= nowcash;
+                foreach (Deposit p in Model.Deposits.Where(i => i.Date == DateTime.Today && i.Cash == "Наличные"))
+                {
+                    nowcash -= p.Money;
+                    cash -= p.Money;
+                }
                 nowallcash = (allcash / 31);
                 foreach (Cost p in Model.Costs.Where(i => i.Date == DateTime.Today))
                 {
                     nowallcash -= p.Money;
+                    allcash -= p.Money;
                 }
-                allcash -= nowallcash;
+                foreach (Deposit p in Model.Deposits.Where(i => i.Date == DateTime.Today))
+                {
+                    nowallcash -= p.Money;
+                    allcash -= p.Money;
+                }
                 newtotalcash = totalcash;
-                foreach(Cost p in Model.Costs.Where(i=> i.Date.Subtract(DateTime.Today).TotalDays <= 31&&i.Date!=DateTime.Today))
+                foreach(Cost p in Model.Costs.Where(i=>i.Date!=DateTime.Today))
+                {
+                    newtotalcash -= p.Money;
+                }
+                foreach (Deposit p in Model.Deposits.Where(i => i.Date != DateTime.Today))
                 {
                     newtotalcash -= p.Money;
                 }
@@ -265,28 +279,48 @@
                 foreach (Cost p in Model.Costs.Where(i => i.Date == DateTime.Today))
                 {
                     nowtotalcash -= p.Money;
+                    newtotalcash -= p.Money;
                 }
-                newtotalcash -= nowtotalcash;
-                string result1 = "";
-                string result2 = "";
-                string result3 = "";
-                string resultt1 = "";
-                string resultt2 = "";
-                string resultt3 = "";
-               
+                foreach (Deposit p in Model.Deposits.Where(i => i.Date == DateTime.Today))
+                {
+                    nowtotalcash -= p.Money;
+                    newtotalcash -= p.Money;
+                }
+                string resultt = "";
+
+                if ((newtotalcash/30)>=60)
+                {
+                    resultt = "alert alert-success";
+
+                }
+                if ((newtotalcash / 30) < 60)
+                {
+                    resultt = "alert alert-info";
+
+                }
+                if ((newtotalcash / 30) < 40)
+                {
+                    resultt = "alert alert-warning";
+
+                }
+                if ((newtotalcash / 30) < 20)
+                {
+                    resultt = "alert alert-danger";
+
+                }
 
 
             }
             <tr>
-                <th>Сегодня</th><td class="@result1">@(Math.Round(nowcash,2))</td><td class="@result2">@(Math.Round(nowallcash, 2))</td><td class="@result3">@(Math.Round(nowtotalcash, 2))</td>
+                <th>Сегодня</th><td >@(Math.Round(nowcash,2))</td><td>@(Math.Round(nowallcash, 2))</td><td >@(Math.Round(nowtotalcash, 2))</td>
                 
             </tr>
             <tr>
                 <th>В день</th>
                 
-                <td class="@resultt1">@(Math.Round((cash / 30), 2))</td>
-                <td class="resultt2">@(Math.Round((allcash / 30), 2))</td>
-                <td class="resultt3">@(Math.Round((newtotalcash / 30), 2))</td>
+                <td >@(Math.Round((cash / 30), 2))</td>
+                <td >@(Math.Round((allcash / 30), 2))</td>
+                <td class="@resultt">@(Math.Round((newtotalcash / 30), 2))</td>
             </tr>
            
         </tbody>

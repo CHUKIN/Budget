@@ -16,6 +16,7 @@ namespace Budget.Models
             public DbSet<Category> Categorys { get; set; }
             public DbSet<Unit> Units { get; set; }
             public DbSet<Deposit> Deposits { get; set; }
+            public DbSet<CostModel> CostModels { get; set; }
             public UserContext(DbContextOptions<UserContext> options)
                 : base(options)
             {

@@ -72,6 +72,32 @@ namespace Budget.Migrations
                     b.ToTable("Costs");
                 });
 
+            modelBuilder.Entity("Budget.Models.CostModel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Cash");
+
+                    b.Property<string>("Category");
+
+                    b.Property<int>("Count");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("Money");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Unit");
+
+                    b.Property<string>("User");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CostModels");
+                });
+
             modelBuilder.Entity("Budget.Models.Deposit", b =>
                 {
                     b.Property<int>("Id")

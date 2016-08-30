@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Budget.ViewModels
+namespace Budget.Models
 {
     public class CostModel
     {
-      
+        public int Id { get; set; }
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public int Money { get; set; }
@@ -16,5 +16,6 @@ namespace Budget.ViewModels
         public int Count { get; set; }
         public string Unit { get; set; }
         public string Cash { get; set; }
+        
     }
 }

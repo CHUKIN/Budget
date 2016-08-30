@@ -75,7 +75,7 @@ namespace Budget.Controllers
             Saving saving = db.Savings.Where(i => i.Name == name).FirstOrDefault();
             if (tmp.Money>=money)
             {
-                db.Deposits.Add(new Deposit { Name = name, Money = money ,Date=DateTime.Now, Cash=cash});
+                db.Deposits.Add(new Deposit { Name = name, Money = money ,Date=DateTime.Today, Cash=cash});
                 tmp.Money -= money;
                 saving.Current += money;
                 db.SaveChanges();
