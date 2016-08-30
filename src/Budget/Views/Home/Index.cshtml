@@ -59,6 +59,30 @@
                         </form>
 
                     </td>
+
+                    <td>
+                       @{if (p.Name != "Наличные")
+                           {
+                        <form asp-action="Transfer" asp-controller="Cash" asp-anti-forgery="true">
+                            <div class="dropdown">
+                                <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">
+                                    Перевести в наличные
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+
+                                    <div class="form-group">
+                                        <label class="sr-only" for="name">Name:</label>
+                                        <input type="number" name="money" class="form-control" id="name" placeholder="Сумма">
+                                    </div>
+                                    <button type="submit" value="@p.Name" name="name" class="btn btn-default btn-block">Добавить</button>
+                                </ul>
+                            </div>
+                        </form>
+                           }
+                    }
+                    </td>
+      
                     <td>
                         <div>
                             <div class="panel-group ">

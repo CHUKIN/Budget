@@ -94,5 +94,21 @@ namespace Budget.Controllers
             db.SaveChanges();
             return Redirect("~/Home/Index");
         }
+        public IActionResult Transfer(string name, int money)
+        {
+            Cash cash = db.Cashs.Where(i => i.Name == name).FirstOrDefault();
+            if (cash.Money>=money)
+            {
+                Cash cashcash = db.Cashs.Where(i => i.Name == "Наличные").FirstOrDefault();
+                if (cashcash!=null)
+                {
+                    cash.Money -= money;
+                    cashcash.Money += money;
+                }
+            }
+            db.SaveChanges();
+            return Redirect("~/Home/Index");
+        }
     }
+
 }
