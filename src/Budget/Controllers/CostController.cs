@@ -32,14 +32,20 @@ namespace Budget.Controllers
                 return View(db);
 
         }
-        public IActionResult Add(string name, int money, string category,int count, string unit,string cash="Наличные")
+        public IActionResult Add(string name, int money, string category,int count, string unit,DateTime date,string cash="Наличные")
         {
             Cash tmp = db.Cashs.Where(i => i.Name == cash).FirstOrDefault();
             if (tmp.Money >= money)
             {
+                DateTime correct = new DateTime(2000,01,01);
+                if (date<correct)
+                {
+               db.Costs.Add(new Cost { Name = name, Money = money, Category = db.Categorys.Where(i => i.Name == category).FirstOrDefault(), Date = DateTime.Today, User = db.Users.Where(i => i.Login == User.Identity.Name).FirstOrDefault(), Count = count, Unit = unit,Cash=cash });
+                }
+                else{
+                                    db.Costs.Add(new Cost { Name = name, Money = money, Category = db.Categorys.Where(i => i.Name == category).FirstOrDefault(), Date = date, User = db.Users.Where(i => i.Login == User.Identity.Name).FirstOrDefault(), Count = count, Unit = unit,Cash=cash });
 
-
-                db.Costs.Add(new Cost { Name = name, Money = money, Category = db.Categorys.Where(i => i.Name == category).FirstOrDefault(), Date = DateTime.Today, User = db.Users.Where(i => i.Login == User.Identity.Name).FirstOrDefault(), Count = count, Unit = unit,Cash=cash });
+                }
                 tmp.Money -= money;
             }
             db.SaveChanges();
